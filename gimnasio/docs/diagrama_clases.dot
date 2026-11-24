@@ -1,0 +1,109 @@
+// Diagrama de clases UML del Sistema de Gestión de Gimnasio.
+// Generar las imágenes desde la carpeta docs/ con:
+//   dot -Tpng -Gdpi=200 diagrama_clases.dot -o diagrama_clases.png
+//   dot -Tsvg diagrama_clases.dot -o diagrama_clases.svg
+
+digraph DiagramaClases {
+    graph [rankdir=TB, splines=spline, nodesep=0.7, ranksep=0.9, pad=0.4,
+           fontname="DejaVu Sans", bgcolor="white",
+           label=<<B>Sistema de Gestión de Gimnasio — Diagrama de clases</B>>, labelloc=t, fontsize=20];
+    node  [shape=plain, fontname="DejaVu Sans", fontsize=11];
+    edge  [fontname="DejaVu Sans", fontsize=10, color="#444444", fontcolor="#333333"];
+
+    // -----------------------------
+    // Clases
+    // -----------------------------
+    Gimnasio [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#1f4e79">
+        <TR><TD BGCOLOR="#1f4e79"><FONT COLOR="white"><B>Gimnasio</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ nombre: str<BR/>+ usuarios: list[Usuario]<BR/>+ clases: list[ClaseGrupal]<BR/>+ pagos: list[Pago]</TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">- _validar_obligatorios(*campos)<BR/>+ registrar_cliente(id, nombre, telefono, tipo_membresia): Cliente<BR/>+ registrar_entrenador(id, nombre, telefono, especialidad): Entrenador<BR/>+ registrar_clase(codigo, nombre, horario, cupo): ClaseGrupal<BR/>+ asignar_entrenador(codigo_clase, id_entrenador)<BR/>+ inscribir(id_cliente, codigo_clase)<BR/>+ cancelar_inscripcion(id_cliente, codigo_clase)<BR/>+ cambiar_membresia(id_cliente, tipo_membresia)<BR/>+ registrar_pago(id_cliente, mes): Pago<BR/>+ buscar_cliente(id) / buscar_entrenador(id) / buscar_clase(codigo)<BR/>+ listar_clientes() / listar_entrenadores() / listar_inscripciones()<BR/>+ cupos_disponibles(clase): int<BR/>+ estado_pago(cliente, mes): str<BR/>+ clientes_pendientes(mes): list[Cliente]<BR/>+ total_recaudado(mes): int</TD></TR>
+        </TABLE>>];
+
+    Usuario [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#385723">
+        <TR><TD BGCOLOR="#385723"><FONT COLOR="white">«abstracta»<BR/><B><I>Usuario</I></B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ id: str<BR/>+ nombre: str<BR/>+ telefono: str</TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ rol(): str<BR/>+ __str__(): str</TD></TR>
+        </TABLE>>];
+
+    Cliente [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#385723">
+        <TR><TD BGCOLOR="#548235"><FONT COLOR="white"><B>Cliente</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ membresia: Membresia<BR/>+ clases_inscritas: list[ClaseGrupal]</TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ rol(): str<BR/>+ cantidad_clases(): int<BR/>+ esta_inscrito(clase): bool<BR/>+ inscribir(clase)<BR/>+ cancelar(clase)<BR/>+ cambiar_membresia(nueva)</TD></TR>
+        </TABLE>>];
+
+    Entrenador [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#385723">
+        <TR><TD BGCOLOR="#548235"><FONT COLOR="white"><B>Entrenador</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ especialidad: str<BR/>+ clases_asignadas: list[ClaseGrupal]</TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ rol(): str<BR/>+ asignar_clase(clase)<BR/>+ quitar_clase(clase)</TD></TR>
+        </TABLE>>];
+
+    Membresia [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#7030a0">
+        <TR><TD BGCOLOR="#7030a0"><FONT COLOR="white">«abstracta»<BR/><B><I>Membresia</I></B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T"><I>+ tipo(): str</I><BR/><I>+ precio_mensual(): int</I><BR/><I>+ max_clases(): int</I></TD></TR>
+        </TABLE>>];
+
+    Basica [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#7030a0">
+        <TR><TD BGCOLOR="#d9c3e9"><B>Basica</B></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ tipo(): "Básica"<BR/>+ precio_mensual(): 60000<BR/>+ max_clases(): 1</TD></TR>
+        </TABLE>>];
+
+    Estandar [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#7030a0">
+        <TR><TD BGCOLOR="#d9c3e9"><B>Estandar</B></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ tipo(): "Estándar"<BR/>+ precio_mensual(): 90000<BR/>+ max_clases(): 3</TD></TR>
+        </TABLE>>];
+
+    Premium [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#7030a0">
+        <TR><TD BGCOLOR="#d9c3e9"><B>Premium</B></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ tipo(): "Premium"<BR/>+ precio_mensual(): 120000<BR/>+ max_clases(): 5</TD></TR>
+        </TABLE>>];
+
+    ClaseGrupal [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#7f6000">
+        <TR><TD BGCOLOR="#bf9000"><FONT COLOR="white"><B>ClaseGrupal</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ codigo: str<BR/>+ nombre: str<BR/>+ horario: str<BR/>+ cupo: int<BR/>+ entrenador: Entrenador</TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ nombre_entrenador(): str<BR/>+ __str__(): str</TD></TR>
+        </TABLE>>];
+
+    Pago [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#843c0c">
+        <TR><TD BGCOLOR="#c55a11"><FONT COLOR="white"><B>Pago</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT" BALIGN="LEFT" SIDES="T">+ cliente: Cliente<BR/>+ mes: str<BR/>+ valor: int<BR/>+ fecha: str</TD></TR>
+        </TABLE>>];
+
+    // -----------------------------
+    // Relaciones
+    // -----------------------------
+
+    // Gimnasio contiene a los demás (rombo en el lado de Gimnasio)
+    Gimnasio -> Pago        [dir=back, arrowtail=diamond,  label=" pagos", headlabel="0..*", labeldistance=2];
+    Gimnasio -> ClaseGrupal [dir=back, arrowtail=diamond,  label=" clases", headlabel="0..*", labeldistance=2];
+    Gimnasio -> Usuario     [dir=back, arrowtail=odiamond, label=" usuarios", headlabel="0..*", labeldistance=2];
+
+    // Herencia (se escribe padre -> hijo con dir=back para que el padre quede arriba)
+    Usuario   -> Cliente    [dir=back, arrowtail=empty];
+    Usuario   -> Entrenador [dir=back, arrowtail=empty];
+    Membresia -> Basica     [dir=back, arrowtail=empty];
+    Membresia -> Estandar   [dir=back, arrowtail=empty];
+    Membresia -> Premium    [dir=back, arrowtail=empty];
+
+    // Cada cliente tiene su propia membresía (composición)
+    Cliente -> Membresia [dir=both, arrowtail=diamond, arrowhead=vee, label=" membresia", headlabel="1", labeldistance=2];
+
+    // Asociaciones
+    Pago       -> Cliente     [arrowhead=vee, label=" cliente", headlabel="1", taillabel="0..*", labeldistance=2];
+    Cliente    -> ClaseGrupal [arrowhead=vee, label=" clases_inscritas", taillabel="0..cupo", headlabel="0..máx", labeldistance=2];
+    Entrenador -> ClaseGrupal [dir=both, arrowhead=vee, arrowtail=vee, label=" dirige", taillabel="0..1", headlabel="0..*", labeldistance=2];
+
+    // Ubicación
+    { rank=same; Pago; ClaseGrupal; Usuario; }
+    { rank=same; Cliente; Entrenador; }
+    { rank=same; Basica; Estandar; Premium; }
+}
