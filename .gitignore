@@ -1,0 +1,3 @@
+# Archivos compilados que Python crea solo
+__pycache__/
+*.pyc

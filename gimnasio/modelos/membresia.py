@@ -40,7 +40,7 @@ class Estandar(Membresia):
         return "Estándar"
 
     def precio_mensual(self) -> int:
-        return 100000
+        return 90000
 
     def max_clases(self) -> int:
         return 3
